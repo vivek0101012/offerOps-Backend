@@ -1,0 +1,33 @@
+package com.example.offerops.constant;
+
+public enum ErrorCode {
+//    1. User Errors
+    USER_NOT_FOUND,
+    USER_ALREADY_EXISTS,
+    USER_EMAIL_INVALID,
+    USER_PASSWORD_WEAK,
+
+//2. Job Application Errors
+            JOB_APP_NOT_FOUND,
+
+    JOB_APP_INVALID_DATE_RANGE,
+
+    JOB_APP_STATUS_TRANSITION_INVALID,
+
+    JOB_APP_URL_INVALID,
+
+    JOB_APP_SOURCE_INVALID,
+
+//3. Status History Errors
+    STATUS_HISTORY_NOT_FOUND,
+    STATUS_HISTORY_CANNOT_MODIFY,
+    STATUS_HISTORY_MISSING_NOTE,
+
+    //4. Global/Validation Errors
+    INVALID_INPUT,
+     VALIDATION_FAILED,
+     ACCESS_DENIED,
+    INTERNAL_SERVER_ERROR,
+    DATA_INTEGRITY_VIOLATION
+
+}
