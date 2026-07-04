@@ -1,8 +1,11 @@
 package com.example.offerops.models;
 
+import com.example.offerops.constant.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -35,26 +38,32 @@ public class JobApplication extends  BaseModel{
     @Column(nullable = false)
     String role;
 
-    @Column(nullable = false)
-    String jd_url;
+    String jdUrl;
 
-    @Column(nullable = false )
-    String jd_description;
+    @Column(columnDefinition = "TEXT")
+    String jdDescription;
 
-    @Column (nullable = false)
-    String resume_url;
+    String resumeUrl;
 
-    @Column(columnDefinition = "varchar(255) default 'DIRECT'")
+    @Column(columnDefinition = "varchar(50) default 'DIRECT'")
     String source;
 
-    String status;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(50) default 'APPLIED'" )
+    ApplicationStatus status;
 
     @Column(nullable = false)
-    Date appliedDate;
+    LocalDate appliedDate;
 
-    @Column(nullable = false)
-    Date deadlineDate;
+    LocalDate deadlineDate;
 
+    @Column(columnDefinition = "Text" )
     String notes;
+
+    @PrePersist public void setDefaults() {
+        if (this.status == null) this.status = ApplicationStatus.APPLIED;
+        if (this.source == null) this.source = "DIRECT";
+
+    }
 
 }

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.concurrent.RecursiveTask;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -28,6 +30,22 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .status(HttpStatus.CONFLICT.value()).build();
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+
+
+    //job
+    @ExceptionHandler(JobApplicationNotFound.class)
+    public  ResponseEntity<ErrorResponse> handleJobExceptionNotFound(JobApplicationNotFound ex){
+
+        ErrorResponse response= ErrorResponse.builder().code(ErrorCode.JOB_APP_NOT_FOUND)
+                .message(ex.getMessage())
+                .status(HttpStatus.NOT_FOUND.value())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
+
+
     }
 
 }

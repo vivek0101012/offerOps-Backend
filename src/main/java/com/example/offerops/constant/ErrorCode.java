@@ -8,7 +8,7 @@ public enum ErrorCode {
     USER_PASSWORD_WEAK,
 
 //2. Job Application Errors
-            JOB_APP_NOT_FOUND,
+    JOB_APP_NOT_FOUND,
 
     JOB_APP_INVALID_DATE_RANGE,
 
