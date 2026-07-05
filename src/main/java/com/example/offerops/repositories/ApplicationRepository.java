@@ -25,5 +25,5 @@ public interface ApplicationRepository extends  JpaRepository<JobApplication,Lon
     List<JobApplication> findByUserIdAndStatus(
             Long userId, ApplicationStatus status);
 
-    Long user(User user);
+
 }
