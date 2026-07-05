@@ -3,8 +3,10 @@ package com.example.offerops.services;
 
 import com.example.offerops.adapter.ApplicationResponseAdapter;
 import com.example.offerops.adapter.CreateApplicationAdapter;
+import com.example.offerops.adapter.UpdateApplicationAdapter;
 import com.example.offerops.dto.ApplicationRequest;
 import com.example.offerops.dto.ApplicationResponse;
+import com.example.offerops.dto.UpdateApplicationRequest;
 import com.example.offerops.exception.JobApplicationNotFound;
 import com.example.offerops.models.JobApplication;
 import com.example.offerops.models.User;
@@ -20,11 +22,18 @@ public class ApplicationServices  {
 
     private final ApplicationRepository applicationRepository;
     private final CreateApplicationAdapter createApplicationAdapter;
-
+    private  final UpdateApplicationAdapter updateApplicationAdapter;
     private  final  ApplicationResponseAdapter applicationResponseAdapter;
-    public ApplicationServices(ApplicationRepository applicationRepository, CreateApplicationAdapter createApplicationAdapter, ApplicationResponseAdapter applicationResponseAdapter) {
+
+    public ApplicationServices(
+            ApplicationRepository applicationRepository,
+            CreateApplicationAdapter createApplicationAdapter,
+            UpdateApplicationAdapter updateApplicationAdapter,
+            ApplicationResponseAdapter applicationResponseAdapter
+    ) {
         this.applicationRepository = applicationRepository;
         this.createApplicationAdapter = createApplicationAdapter;
+        this.updateApplicationAdapter = updateApplicationAdapter;
         this.applicationResponseAdapter = applicationResponseAdapter;
     }
 
@@ -33,6 +42,7 @@ public class ApplicationServices  {
         //user validation logic
 
         User user= new User();
+
         //Request to job application
         JobApplication jobApplication= createApplicationAdapter.toEntity(request);
 
@@ -63,12 +73,47 @@ public class ApplicationServices  {
 
     public ApplicationResponse getApplicationById(Long id,Long userId){
 
-        JobApplication jobApplication= applicationRepository.findByIdAndUserId(Id,userId)
+            return applicationResponseAdapter.toResponse(findApplicationById(id, userId));
+
+    }
+
+
+    //update
+    public ApplicationResponse updateApplication(Long id,Long userId,UpdateApplicationRequest request){
+
+
+        //validate user
+
+        //finding application
+        JobApplication jobApplication= applicationRepository.findByIdAndUserId(id,userId)
                 .orElseThrow(()-> new JobApplicationNotFound("No such job application found"));
+
+        jobApplication  = updateApplicationAdapter.toEntity(jobApplication,request);
+
+        applicationRepository.save(jobApplication);
 
         return  applicationResponseAdapter.toResponse(jobApplication);
 
     }
+
+    //update status we will do later
+
+
+    //delete
+    public  void   deleteApplication(Long userId,Long id){
+
+        //user verifications based on token
+
+        //find application based on user id
+        JobApplication jobApplication= applicationRepository.findByIdAndUserId(id,userId).orElseThrow(
+                ()->new JobApplicationNotFound("No Job Application found")
+                );
+
+        applicationRepository.delete(jobApplication);
+
+
+    }
+
 
 }
 

@@ -2,6 +2,7 @@ package com.example.offerops.repositories;
 
 import com.example.offerops.constant.ApplicationStatus;
 import com.example.offerops.models.JobApplication;
+import com.example.offerops.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,5 @@ public interface ApplicationRepository extends  JpaRepository<JobApplication,Lon
     List<JobApplication> findByUserIdAndStatus(
             Long userId, ApplicationStatus status);
 
+    Long user(User user);
 }
