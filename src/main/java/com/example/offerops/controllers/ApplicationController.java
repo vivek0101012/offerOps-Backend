@@ -2,9 +2,11 @@ package com.example.offerops.controllers;
 
 
 import com.example.offerops.dto.*;
+import com.example.offerops.security.CustomUserDetails;
 import com.example.offerops.services.ApplicationServices;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 @RestController
 public class ApplicationController {
 
-    Long userId=1L;
+
 
 
     private  final ApplicationServices applicationServices;
@@ -25,18 +27,19 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<ApplicationResponse> createApplication(@RequestBody @Valid ApplicationRequest request){
+    public ResponseEntity<ApplicationResponse> createApplication(@AuthenticationPrincipal
+                                                                 CustomUserDetails user,@RequestBody @Valid ApplicationRequest request){
 
+        Long userId = user.getId();
         ApplicationResponse response= applicationServices.createApplication(
                 request,userId
         );
         return  ResponseEntity.ok(response);
-        //how to get the id
     }
 
     @GetMapping
-    public ResponseEntity<List<ApplicationResponse>> getAllApplications(){
-
+    public ResponseEntity<List<ApplicationResponse>> getAllApplications(@AuthenticationPrincipal CustomUserDetails user){
+        Long userId = user.getId();
         List<ApplicationResponse> response= applicationServices.getAllApplications(userId);
 
         return  ResponseEntity.ok(response);
@@ -44,9 +47,9 @@ public class ApplicationController {
 
 
     @GetMapping("/{id}")
-    public  ResponseEntity<ApplicationResponse> getApplication(
-            @PathVariable Long id
+    public  ResponseEntity<ApplicationResponse> getApplication(  @AuthenticationPrincipal CustomUserDetails user, @PathVariable Long id
     ){
+        Long userId = user.getId();
         ApplicationResponse response = applicationServices.getApplicationById(id,userId);
 
         return ResponseEntity.ok(response);
@@ -56,19 +59,22 @@ public class ApplicationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApplicationResponse> updateApplication(
+            @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long id,
-            @RequestBody UpdateApplicationRequest request
+            @RequestBody @Valid  UpdateApplicationRequest request
             ){
-
+        Long userId = user.getId();
         ApplicationResponse response= applicationServices.updateApplication(id,userId,request);
         return  ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/status")
     public  ResponseEntity<ApplicationResponse> updateApplicationStatus(
+            @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long id,
             @RequestBody @Valid UpdateStatusRequest request
     ){
+        Long userId = user.getId();
         ApplicationResponse response = applicationServices.updateStatus(id,userId,request);
 
         return  ResponseEntity.ok(response);
@@ -76,15 +82,17 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable Long id) {
-        Long userId = 1L;
+    public ResponseEntity<MessageResponse> delete(@AuthenticationPrincipal CustomUserDetails user,
+                                                  @PathVariable Long id) {
+        Long userId = user.getId();
         applicationServices.deleteApplication(id, userId);
         return ResponseEntity.ok(new MessageResponse("Application deleted successfully"));
     }
 
     @GetMapping("/{id}/history")
-    public ResponseEntity<List<StatusHistoryResponse>> getStatusHistory(@PathVariable Long id){
+    public ResponseEntity<List<StatusHistoryResponse>> getStatusHistory(@AuthenticationPrincipal CustomUserDetails user,@PathVariable Long id){
 
+        Long userId = user.getId();
         List<StatusHistoryResponse> responses=  applicationServices.getStatusHistory(id,userId);
 
         return  ResponseEntity.ok(responses);

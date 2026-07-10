@@ -7,15 +7,18 @@ import com.example.offerops.adapter.StatusHistoryResponseAdapter;
 import com.example.offerops.adapter.UpdateApplicationAdapter;
 import com.example.offerops.dto.*;
 import com.example.offerops.exception.JobApplicationNotFound;
+import com.example.offerops.exception.UserNotFoundException;
 import com.example.offerops.models.JobApplication;
 import com.example.offerops.models.StatusHistory;
 import com.example.offerops.models.User;
 import com.example.offerops.repositories.ApplicationRepository;
 import com.example.offerops.repositories.StatusHistoryRepository;
+import com.example.offerops.repositories.UserRepository;
 import org.springframework.data.util.TypeCollector;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApplicationServices  {
@@ -27,26 +30,27 @@ public class ApplicationServices  {
     private  final  ApplicationResponseAdapter applicationResponseAdapter;
     private  final StatusHistoryRepository statusHistoryRepository;
     private  final StatusHistoryResponseAdapter statusHistoryResponseAdapter;
+    private final UserRepository userRepository;
 
     public ApplicationServices(
             ApplicationRepository applicationRepository,
             CreateApplicationAdapter createApplicationAdapter,
             UpdateApplicationAdapter updateApplicationAdapter,
-            ApplicationResponseAdapter applicationResponseAdapter, StatusHistoryRepository statusHistoryRepository, StatusHistoryResponseAdapter statusHistoryResponseAdapter
-    ) {
+            ApplicationResponseAdapter applicationResponseAdapter, StatusHistoryRepository statusHistoryRepository, StatusHistoryResponseAdapter statusHistoryResponseAdapter,
+            UserRepository userRepository) {
         this.applicationRepository = applicationRepository;
         this.createApplicationAdapter = createApplicationAdapter;
         this.updateApplicationAdapter = updateApplicationAdapter;
         this.applicationResponseAdapter = applicationResponseAdapter;
         this.statusHistoryRepository = statusHistoryRepository;
         this.statusHistoryResponseAdapter = statusHistoryResponseAdapter;
+        this.userRepository = userRepository;
     }
 
     public ApplicationResponse createApplication(ApplicationRequest request, Long userId){
 
-        //user validation logic
-
-        User user= new User();
+        //find user details
+        User user=userRepository.findById(userId).orElseThrow( ()-> new UserNotFoundException("No User Exist"));
 
         //Request to job application
         JobApplication jobApplication= createApplicationAdapter.toEntity(request);
@@ -89,7 +93,8 @@ public class ApplicationServices  {
     public ApplicationResponse updateApplication(Long id,Long userId,UpdateApplicationRequest request){
 
 
-        //validate user
+
+
 
         //find the application
         JobApplication jobApplication = findApplicationById(id, userId);
@@ -105,12 +110,14 @@ public class ApplicationServices  {
     //update status we will do later
     public  ApplicationResponse updateStatus(Long id, Long userId, UpdateStatusRequest request){
 
-        //user validation
+
 
         //job application validation
         JobApplication jobApplication=findApplicationById(id, userId);
 
         //validate the status logic ;
+
+        //leave for now
 
         //update the status
         StatusHistory history = StatusHistory.builder()
@@ -124,7 +131,9 @@ public class ApplicationServices  {
         //save
         jobApplication=applicationRepository.save(jobApplication);
 
+
         //update the status history for the job application
+        //leave for now
 
         //transform and return
         return  applicationResponseAdapter.toResponse(jobApplication);
@@ -135,7 +144,6 @@ public class ApplicationServices  {
     //delete
     public  void   deleteApplication(Long userId,Long id){
 
-        //user verifications based on token
 
         //find application based on user id
         JobApplication jobApplication = findApplicationById(id, userId);
@@ -150,7 +158,6 @@ public class ApplicationServices  {
 
     public  List<StatusHistoryResponse> getStatusHistory(Long id,Long userId){
 
-        //validate the user
 
         //find the job application
         JobApplication jobApplication = findApplicationById(id,userId);

@@ -15,10 +15,9 @@ import java.util.List;
 @Entity
 public class User extends  BaseModel{
 
- @Column(nullable = false,unique = true)
+ @Column(unique = true)
 String email;
 
- @Column(nullable = false)
  String password;
 
  @Column(nullable = false)

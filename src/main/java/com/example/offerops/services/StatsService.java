@@ -28,7 +28,6 @@ public class StatsService {
 
     public SummaryResponse getSummary(Long userId) {
 
-       //do user validation
 
         List<JobApplication> apps = getUserApplications(userId);
         // calculate from apps
@@ -62,7 +61,6 @@ public class StatsService {
 
     public List<SourceResponse> getSource(Long userId){
 
-        //VALIDATE THE USER
 
         List<JobApplication> apps=getUserApplications(userId);
         return apps.stream()
@@ -84,7 +82,6 @@ public class StatsService {
 
     public  List<WeeklyResponse> getWeekly(Long userId){
 
-        //validate the user
 
 
         List<JobApplication> apps= getUserApplications(userId);

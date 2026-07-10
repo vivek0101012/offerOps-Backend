@@ -6,6 +6,7 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS,
     USER_EMAIL_INVALID,
     USER_PASSWORD_WEAK,
+    UNAUTHORIZED,
 
 //2. Job Application Errors
     JOB_APP_NOT_FOUND,
@@ -28,6 +29,10 @@ public enum ErrorCode {
      VALIDATION_FAILED,
      ACCESS_DENIED,
     INTERNAL_SERVER_ERROR,
-    DATA_INTEGRITY_VIOLATION
+    DATA_INTEGRITY_VIOLATION,
 
+// 5. spring throw eror
+    VALIDATION_ERROR,
+    BAD_REQUEST,
+    METHOD_NOT_ALLOWED,
 }
