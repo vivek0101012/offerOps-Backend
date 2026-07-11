@@ -17,7 +17,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-
+import com.example.offerops.security.Auth0LoginFailureHandler;
+import com.example.offerops.security.Auth0LoginSuccessHandler;
 @Configuration
 public class SpringSecurity {
 
@@ -25,11 +26,16 @@ public class SpringSecurity {
     private final CorsProperties corsProperties;
     private final JwtFilter jwtAuthFilter;
 
-;
+;private final Auth0LoginSuccessHandler auth0LoginSuccessHandler;
+    private final Auth0LoginFailureHandler auth0LoginFailureHandler;
 
-    public SpringSecurity(CorsProperties corsProperties, JwtFilter jwtAuthFilter) {
+
+    public SpringSecurity(CorsProperties corsProperties, JwtFilter jwtAuthFilter, Auth0LoginSuccessHandler auth0LoginSuccessHandler, Auth0LoginFailureHandler auth0LoginFailureHandler) {
         this.corsProperties = corsProperties;
         this.jwtAuthFilter = jwtAuthFilter;
+
+        this.auth0LoginSuccessHandler = auth0LoginSuccessHandler;
+        this.auth0LoginFailureHandler = auth0LoginFailureHandler;
     }
 
     //FILTER CHAIN
@@ -44,7 +50,7 @@ public class SpringSecurity {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/auth/register","/api/auth/login" ,"/error","/api/internal/**")
+                        .requestMatchers("/api/auth/register","/api/auth/login" ,"/error","/api/internal/**","/oauth2/**","/login/oauth2/**")
                         .permitAll()
 
                         .anyRequest()
@@ -53,8 +59,11 @@ public class SpringSecurity {
                 )
                 .addFilterBefore(
                 jwtAuthFilter,
-                UsernamePasswordAuthenticationFilter.class
-        )
+                UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(auth0LoginSuccessHandler)
+                        .failureHandler(auth0LoginFailureHandler)
+                )
 
         ;
 
