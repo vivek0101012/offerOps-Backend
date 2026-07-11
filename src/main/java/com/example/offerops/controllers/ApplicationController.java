@@ -85,7 +85,7 @@ public class ApplicationController {
     public ResponseEntity<MessageResponse> delete(@AuthenticationPrincipal CustomUserDetails user,
                                                   @PathVariable Long id) {
         Long userId = user.getId();
-        applicationServices.deleteApplication(id, userId);
+        applicationServices.deleteApplication(userId, id);
         return ResponseEntity.ok(new MessageResponse("Application deleted successfully"));
     }
 

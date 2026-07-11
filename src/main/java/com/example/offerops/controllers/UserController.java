@@ -31,7 +31,7 @@ public class UserController {
             @AuthenticationPrincipal
             CustomUserDetails user,
 
-            @RequestBody
+           @Valid @RequestBody
             UpdateProfileRequest request) {
 
 

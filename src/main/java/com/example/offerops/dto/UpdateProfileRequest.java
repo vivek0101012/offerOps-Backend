@@ -1,5 +1,6 @@
 package com.example.offerops.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class UpdateProfileRequest {
 
     private String name;
 
+    @Email(message = "Invalid email format")
     private String email;
 
 }
