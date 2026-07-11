@@ -53,8 +53,9 @@ public class UserService {
         if (request.getName() != null) {
             user.setName(request.getName());
         }
+        User savedUser = userRepository.save(user);
 
-        return userDtoAdapter.toDto(user);
+        return userDtoAdapter.toDto(savedUser);
     }
 
     @Transactional
@@ -79,7 +80,8 @@ public class UserService {
                         request.getNewPassword()
                 )
         );
+        User savedUser = userRepository.save(user);
 
-        return userDtoAdapter.toDto(user);
+        return userDtoAdapter.toDto(savedUser);
     }
 }

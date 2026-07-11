@@ -7,14 +7,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
 @Component
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "app.cors")
 public class CorsProperties {
 
-    private List<String> allowedOrigins = List.of("*");
+    private List<String> allowedOrigins;
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;

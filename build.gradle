@@ -44,6 +44,8 @@ dependencies {
     // Import the BOM to align versions
     implementation platform("me.paulschwarz:spring-dotenv-bom:5.0.1")
 
+
+
     // For Spring Boot 4.x
     developmentOnly "me.paulschwarz:springboot4-dotenv"
 
@@ -55,6 +57,10 @@ dependencies {
 
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+
+    //for email services
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 
 }

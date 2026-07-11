@@ -44,7 +44,7 @@ public class SpringSecurity {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/auth/register","/api/auth/login" ,"/error")
+                        .requestMatchers("/api/auth/register","/api/auth/login" ,"/error","/api/internal/**")
                         .permitAll()
 
                         .anyRequest()
@@ -66,9 +66,12 @@ public class SpringSecurity {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(corsProperties.getAllowedOrigins());
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
 
+        configuration.setAllowCredentials(true);
+
+        configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 

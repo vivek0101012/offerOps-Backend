@@ -3,6 +3,7 @@ package com.example.offerops.controllers;
 import com.example.offerops.dto.ChangePasswordRequest;
 import com.example.offerops.dto.UpdateProfileRequest;
 import com.example.offerops.dto.UserDto;
+import com.example.offerops.models.User;
 import com.example.offerops.security.CustomUserDetails;
 import com.example.offerops.services.UserService;
 import jakarta.validation.Valid;
