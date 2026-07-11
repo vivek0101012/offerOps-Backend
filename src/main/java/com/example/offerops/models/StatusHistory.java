@@ -3,6 +3,7 @@ package com.example.offerops.models;
 import com.example.offerops.constant.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,7 @@ public class StatusHistory  extends  BaseModel {
     @Column(nullable = false)
     private  ApplicationStatus toStatus;
 
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime changedAt;
 

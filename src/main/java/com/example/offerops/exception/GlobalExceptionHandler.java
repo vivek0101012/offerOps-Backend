@@ -86,6 +86,7 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
     }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentials(
             BadCredentialsException ex) {
@@ -96,6 +97,7 @@ public class GlobalExceptionHandler {
                 "Invalid email or password."
         );
     }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMalformedJson(HttpMessageNotReadableException ex) {
         return buildResponse(
@@ -140,4 +142,22 @@ public class GlobalExceptionHandler {
                 "Internal server error."
         );
     }
+
+
+    @ExceptionHandler(InvalidTransitionException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTransitionException(
+            InvalidTransitionException ex) {
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .code(ErrorCode.JOB_APP_STATUS_TRANSITION_INVALID)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
 }

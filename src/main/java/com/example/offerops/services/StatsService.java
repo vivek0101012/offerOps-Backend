@@ -6,10 +6,7 @@ import com.example.offerops.dto.SummaryResponse;
 import com.example.offerops.dto.WeeklyResponse;
 import com.example.offerops.models.JobApplication;
 import com.example.offerops.repositories.ApplicationRepository;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
-
-import java.security.PublicKey;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;

@@ -14,6 +14,8 @@ import com.example.offerops.models.User;
 import com.example.offerops.repositories.ApplicationRepository;
 import com.example.offerops.repositories.StatusHistoryRepository;
 import com.example.offerops.repositories.UserRepository;
+import com.example.offerops.state.ApplicationState;
+import com.example.offerops.state.ApplicationStatusFactory;
 import org.springframework.data.util.TypeCollector;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +33,14 @@ public class ApplicationServices  {
     private  final StatusHistoryRepository statusHistoryRepository;
     private  final StatusHistoryResponseAdapter statusHistoryResponseAdapter;
     private final UserRepository userRepository;
+    private  final ApplicationStatusFactory applicationStatusFactory;
 
     public ApplicationServices(
             ApplicationRepository applicationRepository,
             CreateApplicationAdapter createApplicationAdapter,
             UpdateApplicationAdapter updateApplicationAdapter,
             ApplicationResponseAdapter applicationResponseAdapter, StatusHistoryRepository statusHistoryRepository, StatusHistoryResponseAdapter statusHistoryResponseAdapter,
-            UserRepository userRepository) {
+            UserRepository userRepository, ApplicationStatusFactory applicationStatusFactory) {
         this.applicationRepository = applicationRepository;
         this.createApplicationAdapter = createApplicationAdapter;
         this.updateApplicationAdapter = updateApplicationAdapter;
@@ -45,6 +48,7 @@ public class ApplicationServices  {
         this.statusHistoryRepository = statusHistoryRepository;
         this.statusHistoryResponseAdapter = statusHistoryResponseAdapter;
         this.userRepository = userRepository;
+        this.applicationStatusFactory = applicationStatusFactory;
     }
 
     public ApplicationResponse createApplication(ApplicationRequest request, Long userId){
@@ -116,8 +120,9 @@ public class ApplicationServices  {
         JobApplication jobApplication=findApplicationById(id, userId);
 
         //validate the status logic ;
+        ApplicationState currentState=applicationStatusFactory.get(jobApplication.getStatus());
 
-        //leave for now
+        currentState.validate(request.getStatus());
 
         //update the status
         StatusHistory history = StatusHistory.builder()

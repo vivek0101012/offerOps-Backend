@@ -18,13 +18,6 @@ public class UserDto {
     private  String email;
     private Long id;
 
-    public  static UserDto UserDtoBuilder(User user){
 
-     return UserDto.builder()
-             .id(user.getId())
-             .email(user.getEmail())
-             .name(user.getName())
-             .build();
-    }
 
 }
