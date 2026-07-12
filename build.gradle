@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
@@ -42,7 +42,7 @@ dependencies {
 
     //ENV
     // Import the BOM to align versions
-    implementation platform("me.paulschwarz:spring-dotenv-bom:5.0.1")
+    implementation platform("me.paulschwarz:spring-dotenv-bom:5.1.0")
 
 
 
