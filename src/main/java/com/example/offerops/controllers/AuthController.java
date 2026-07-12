@@ -38,7 +38,7 @@ public class AuthController {
                 .secure(true)
                 .path("/")
                 .maxAge(Duration.ofHours(1))
-                .sameSite("strict")
+                .sameSite("None")
                 .build();
 
         return  ResponseEntity.status(HttpStatus.CREATED)
@@ -53,10 +53,10 @@ public class AuthController {
 
         ResponseCookie cookie=ResponseCookie.from("jwt",response.getToken())
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .path("/")
                 .maxAge(Duration.ofHours(1))
-                .sameSite("Lax")
+                .sameSite("None")
                 .build();
 
         return  ResponseEntity.status(HttpStatus.OK)

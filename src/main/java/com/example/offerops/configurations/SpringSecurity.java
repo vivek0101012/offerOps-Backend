@@ -72,10 +72,10 @@ public class SpringSecurity {
                         .logoutSuccessHandler((request, response, authentication) -> {
                             org.springframework.http.ResponseCookie cookie = org.springframework.http.ResponseCookie.from("jwt", "")
                                     .httpOnly(true)
-                                    .secure(false)
+                                    .secure(true)
                                     .path("/")
                                     .maxAge(0) // Expire immediately
-                                    .sameSite("Lax")
+                                    .sameSite("None")
                                     .build();
                             response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, cookie.toString());
                             response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_OK);
