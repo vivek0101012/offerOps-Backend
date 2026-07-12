@@ -49,7 +49,7 @@ public class SpringSecurity {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login/**", "/api/auth/register", "/api/auth/login", "/error", "/api/internal/**", "/oauth2/**", "/login/oauth2/**")
+                        .requestMatchers("/login/**", "/api/auth/register", "/api/auth/login", "/error", "/api/internal/**", "/oauth2/**", "/login/oauth2/**","/api/health")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
