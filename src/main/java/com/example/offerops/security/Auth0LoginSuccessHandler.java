@@ -36,9 +36,12 @@ public class Auth0LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException {
 
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
-        String email = oidcUser.getEmail();
+        String email = oidcUser.getEmail().toLowerCase().trim(); ;
         String name = oidcUser.getFullName() != null ? oidcUser.getFullName() : email;
-
+        if (email == null) {
+            response.sendRedirect(redirectUri + "?error=email_not_provided");
+            return;
+        }
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> userRepository.save(
                         User.builder()
@@ -53,13 +56,18 @@ public class Auth0LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofHours(1))
-                .sameSite("strict")
+                .sameSite("Lax")
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        //
         response.sendRedirect(redirectUri);
     }
 }

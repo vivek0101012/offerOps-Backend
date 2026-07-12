@@ -53,10 +53,10 @@ public class AuthController {
 
         ResponseCookie cookie=ResponseCookie.from("jwt",response.getToken())
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofHours(1))
-                .sameSite("strict")
+                .sameSite("Lax")
                 .build();
 
         return  ResponseEntity.status(HttpStatus.OK)

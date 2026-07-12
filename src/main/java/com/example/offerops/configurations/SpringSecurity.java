@@ -49,13 +49,15 @@ public class SpringSecurity {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers("/api/auth/register","/api/auth/login" ,"/error","/api/internal/**","/oauth2/**","/login/oauth2/**")
+                        .requestMatchers("/login/**", "/api/auth/register", "/api/auth/login", "/error", "/api/internal/**", "/oauth2/**", "/login/oauth2/**")
                         .permitAll()
-
                         .anyRequest()
                         .authenticated()
 
+                )   .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })
                 )
                 .addFilterBefore(
                 jwtAuthFilter,
@@ -63,6 +65,21 @@ public class SpringSecurity {
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(auth0LoginSuccessHandler)
                         .failureHandler(auth0LoginFailureHandler)
+                ) .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            org.springframework.http.ResponseCookie cookie = org.springframework.http.ResponseCookie.from("jwt", "")
+                                    .httpOnly(true)
+                                    .secure(false)
+                                    .path("/")
+                                    .maxAge(0) // Expire immediately
+                                    .sameSite("Lax")
+                                    .build();
+                            response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, cookie.toString());
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_OK);
+                        })
                 )
 
         ;

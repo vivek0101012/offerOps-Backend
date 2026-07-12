@@ -66,7 +66,10 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found."));
-
+        if (user.getPassword() == null) {
+            throw new BadCredentialsException(
+                    "Password change not available for social login accounts.");
+        }
         if (!passwordEncoder.matches(
                 request.getOldPassword(),
                 user.getPassword())) {
